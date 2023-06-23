@@ -12,7 +12,7 @@ const port: number = process.env.PORT || 8000;
 
 if (app.get("env") === "development") {
   app.use(morgan("combined"));
-  console.log("Morgan enabled...");
+  console.log("Morgan enabled.");
 }
 
 app.use(cors());
