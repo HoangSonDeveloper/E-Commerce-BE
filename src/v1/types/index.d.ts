@@ -1,15 +1,13 @@
-export interface QueryResultBase {}
-
-export interface QueryResultRow {
-  [column: string]: any;
+export interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  admin: boolean;
 }
 
-export interface QueryResult<R extends QueryResultRow = QueryResultRow>
-  extends QueryResultBase {
-  rows: R[];
-}
-
-export interface MongoDBConfig {
-  url: string | undefined;
-  port: number | undefined;
+export interface IUserAuth extends IUser {
+  generateAuthToken(): string;
+  hashPassword(): Promise<string>;
+  comparePassword(): Promise<boolean>;
 }

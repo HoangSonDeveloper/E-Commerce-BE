@@ -3,7 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { config } from "dotenv";
 import { router } from "./v1/router";
-import connectToDatabase from "./v1/models";
+import { connectToMongoDBDatabase, connectToFirebaseDatabase } from "./v1/db";
 
 config();
 
@@ -19,7 +19,8 @@ app.use(cors());
 app.use(Express.json());
 app.use(process.env.ROOT_ENDPOINT, router);
 
-connectToDatabase();
+connectToMongoDBDatabase();
+connectToFirebaseDatabase();
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
