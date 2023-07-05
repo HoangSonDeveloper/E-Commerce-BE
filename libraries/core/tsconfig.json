@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "./dist",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "jest",
+      "reflect-metadata"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+}

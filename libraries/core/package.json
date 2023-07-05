@@ -1,0 +1,26 @@
+{
+  "name": "@learnbox/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HoangSonDeveloper/E-Commerce-BE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HoangSonDeveloper/E-Commerce-BE/issues"
+  },
+  "homepage": "https://github.com/HoangSonDeveloper/E-Commerce-BE#readme",
+  "dependencies": {
+    "@learnbox/common": "file:../common",
+    "inversify": "^6.0.1",
+    "mongodb": "^5.6.0",
+    "reflect-metadata": "^0.1.13"
+  }
+}
