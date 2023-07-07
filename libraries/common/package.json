@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/HoangSonDeveloper/E-Commerce-BE#readme",
   "dependencies": {
+    "@learnbox/logger": "file:../logger",
     "@types/express": "^4.17.17",
     "typeorm": "^0.3.17"
   }

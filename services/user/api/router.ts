@@ -1,5 +1,4 @@
-import { Request, Response, NextFunction, Application, Router } from "express";
-import UserRepository from "../data-access/user.repository";
+import { Router } from "express";
 import { UserController } from "../domain/user.controller";
 import { asyncWrap } from "@learnbox/common";
 
@@ -15,9 +14,8 @@ export default class UserRouter {
 
     router.post(
       "/users",
-      this.getController(this.userController, "createUser")
+      this.getController(this.userController, "createAccount")
     );
-    router.get("/hello", this.getController(this.userController, "hello"));
 
     return router;
   }

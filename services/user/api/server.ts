@@ -3,7 +3,7 @@ import { AddressInfo } from "net";
 import Express, { Application } from "express";
 import helmet from "helmet";
 import UserRouter from "./router";
-import { jwtVerifierMiddleware } from "@learnbox/middlewares";
+import { errorHandlerMiddleware } from "@learnbox/common";
 import * as configProvider from "@learnbox/config-provider";
 import getDatabase from "../data-access/models/db.connection";
 
@@ -19,14 +19,8 @@ async function startWebServer(): Promise<AddressInfo> {
     configProvider.getValue("apiPrefix"),
     new UserRouter().defineRoutes()
   );
-  // app.use(
-  //   jwtVerifierMiddleware({
-  //     secret: configProvider.getValue("jwtTokenSecret"),
-  //   })
-  // );
-
-  // defineErrorHandlingMiddleware(app);
   connectToDatabase();
+  errorHandlerMiddleware(app);
   const APIAddress = await openConnection(app);
   return APIAddress;
 }
