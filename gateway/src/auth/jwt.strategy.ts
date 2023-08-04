@@ -10,6 +10,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { IUsersService } from '../users/users.interface';
 import { User } from 'src/common/common.interface';
 import { Request } from 'express';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class JwtStrategy
@@ -37,5 +38,15 @@ export class JwtStrategy
   onModuleInit(): void {
     this.usersService =
       this.usersServiceClient.getService<IUsersService>('UsersService');
+  }
+
+  async validate(payload: any): Promise<User> {
+    const user = lastValueFrom(this.usersService.findOne({
+      where: JSON.stringify({ id: payload.sub }),
+    }));
+
+    if (!user) throw new Error('User not found');
+
+    return user;
   }
 }

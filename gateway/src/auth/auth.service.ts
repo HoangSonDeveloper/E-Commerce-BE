@@ -100,8 +100,9 @@ export class AuthService implements OnModuleInit {
     const payload = {
       sub: user['_id'],
       email: user.email,
+
     };
 
-    return await this.jwtService.signAsync(payload);
+    return await this.jwtService.signAsync(payload, { expiresIn: '60d' });
   }
 }

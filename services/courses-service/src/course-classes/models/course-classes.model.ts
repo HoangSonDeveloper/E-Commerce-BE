@@ -5,7 +5,7 @@ import {
   DataType,
   ForeignKey,
 } from 'sequelize-typescript';
-import { Course } from 'src/courses/models/courses.model';
+import { Course } from '../../courses/models/courses.model';
 
 @Table({
   tableName: 'classes',
