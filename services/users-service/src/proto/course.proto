@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package course;
+
+import "commons.proto";
+
+message Course {
+  string id = 1;
+  string name = 2;
+  string shortDescription = 3;
+  string description = 4;
+  string outcome = 5;
+  string level = 6;
+  string format = 7;
+  double price = 8;
+  string thumbnail = 9;
+  bool isPublished = 10;
+  string formatType = 11;
+  string createdAt = 12;
+  string updatedAt = 13;
+}
+
+message CourseEdge {
+  Course node = 1;
+  string cursor = 2;
+}
+
+message CreateCourseInput {
+  string name = 2;
+  string shortDescription = 3;
+  string description = 4;
+  string outcome = 5;
+  string level = 6;
+  string format = 7;
+  double price = 8;
+  string thumbnail = 9;
+  bool isPublished = 10;
+  string formatType = 11;
+}
+
+message UpdateCourseInput {
+  string id = 1;
+  Course data = 2;
+}
+
+message Enrollment {
+  string id = 1;
+  string classId = 2;
+  string studentId = 3;
+  string enrollmentDate = 4;
+  bool cancelled = 5;
+  string cancelReason = 6;
+}
+
+message EnrollmentInput {
+  string classId = 1;
+  string studentId = 2;
+}
+
+message FindCoursePayload {
+  repeated CourseEdge edges = 1;
+  commons.PageInfo pageInfo = 2;
+}
+
+service CoursesService {
+  rpc find (commons.Query) returns (FindCoursePayload) {}
+  rpc findById (commons.Id) returns (Course) {}
+  rpc findOne (commons.Query) returns (Course) {}
+  rpc count (commons.Query) returns (commons.Count) {}
+  rpc create (CreateCourseInput) returns (Course) {}
+  rpc update (UpdateCourseInput) returns (Course) {}
+  rpc destroy (commons.Query) returns (commons.Count) {}
+  rpc enroll (EnrollmentInput) returns (Enrollment) {}
+}

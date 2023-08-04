@@ -20,7 +20,7 @@ async function main() {
         },
       },
     },
-  ); // Start the microservice
+  );
 
   return app.listen();
 }

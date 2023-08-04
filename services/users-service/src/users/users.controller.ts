@@ -8,8 +8,14 @@ import { ICount, IQuery } from '../common/common.interface';
 import { IUsersService } from './users.interface';
 import { IFindPayload } from '../common/cursor-pagination.interface';
 
-import { User } from './user.model';
-import { UserCreateDto, UserDto } from './user.dto';
+import { User } from './models/users.model';
+import {
+  AssignRoleDto,
+  UserCreateDto,
+  UserDto,
+  UserRoleDto,
+} from './users.dto';
+import { UserRole } from './models/user-roles.model';
 
 const { map } = Aigle;
 
@@ -80,7 +86,7 @@ export class UsersController {
 
   @GrpcMethod('UsersService', 'create')
   async create(data: UserDto): Promise<User> {
-    const result: User = await this.service.create(data);
+    const result = await this.service.create(data);
 
     return result;
   }
@@ -99,5 +105,22 @@ export class UsersController {
     });
 
     return { count };
+  }
+
+  @GrpcMethod('UsersService', 'getRole')
+  async getRole(userId: string): Promise<UserRoleDto> {
+    console.log('getRole', userId);
+    const userRole = await this.service.getRole(userId);
+
+    if (isEmpty(userRole)) throw new Error('Record not found.');
+
+    return userRole;
+  }
+
+  @GrpcMethod('UsersService', 'assignRole')
+  async assignRole(data: any): Promise<UserRoleDto> {
+    const result = await this.service.assignRole(data);
+
+    return result;
   }
 }

@@ -24,10 +24,17 @@ export interface UpdateCommentInput {
   text?: string;
 }
 
-export interface CreatePostInput {
-  title: string;
-  body: string;
-  published: boolean;
+export interface CreateCourseInput {
+  id: string;
+  name: string;
+  shortDescription?: string;
+  description?: string;
+  outcome?: string;
+  level?: string;
+  price?: number;
+  thumbnail?: string;
+  isPublished?: boolean;
+  formatType?: string;
 }
 
 export interface UpdatePostInput {
@@ -65,14 +72,14 @@ export interface UpdatePasswordInput {
 
 export interface ISubscription {
   commentAdded(post: string): Comment | Promise<Comment>;
-  postAdded(): Post | Promise<Post>;
+  postAdded(): Course | Promise<Course>;
 }
 
 export interface Comment {
   id: string;
   text: string;
   author: User;
-  post: Post;
+  post: Course;
   createdAt: DateTime;
   updatedAt: DateTime;
   version: number;
@@ -110,16 +117,33 @@ export interface PageInfo {
   hasPreviousPage: boolean;
 }
 
-export interface Post {
+export interface Course {
   id: string;
-  title: string;
-  body: string;
-  published: boolean;
-  author: User;
-  comments?: CommentsConnection;
-  createdAt: DateTime;
-  updatedAt: DateTime;
-  version: number;
+  name: string;
+  shortDescription?: string;
+  description?: string;
+  outcome?: string;
+  level?: string;
+  price?: number;
+  thumbnail?: string;
+  isPublished?: boolean;
+  formatType?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Enrollment {
+  id: string;
+  classId: string;
+  studentId: string;
+  enrollmentDate: Date;
+  cancelled: boolean;
+  cancelReason: string;
+}
+
+export interface EnrollmentInputDto {
+  classId: string;
+  studentId: string[];
 }
 
 export interface PostsConnection {
@@ -128,13 +152,13 @@ export interface PostsConnection {
 }
 
 export interface PostEdge {
-  node: Post;
+  node: Course;
   cursor: string;
 }
 
 export interface PostPayload {
   errors?: ErrorPayload[];
-  post?: Post;
+  post?: Course;
 }
 
 export interface DeletePostPayload {
@@ -144,13 +168,22 @@ export interface DeletePostPayload {
 
 export interface User {
   id: string;
-  name: string;
   email: EmailAddress;
   password: string;
-  posts?: PostsConnection;
-  comments?: CommentsConnection;
-  createdAt: DateTime;
-  updatedAt: DateTime;
+  isVerified: boolean;
+  biography?: string;
+  birthday?: string;
+  name?: string;
+  avatar?: string;
+  phone?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface UserRole {
+  userId: string;
+  roleId: number;
+  roleName: string;
 }
 
 export interface UsersConnection {
@@ -177,3 +210,9 @@ export type DateTime = any;
 export type EmailAddress = any;
 export type UnsignedInt = any;
 export type JSONObject = any;
+
+export const enum ROLES {
+  STUDENT = 1,
+  INSTRUCTOR = 2,
+  ADMIN = 3,
+}

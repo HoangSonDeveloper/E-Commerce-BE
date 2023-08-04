@@ -1,10 +1,16 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserInput, User } from '../common/common.interface';
+import {
+  LoginUserInput,
+  ROLES,
+  User,
+  UserRole,
+} from '../common/common.interface';
 import { SignupUserInput } from '../common/common.interface';
 import { ClientGrpcProxy } from '@nestjs/microservices';
 import { IUsersService } from '../users/users.interface';
 import { PasswordUtils } from '../utils/password.utils';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -23,30 +29,42 @@ export class AuthService implements OnModuleInit {
   }
 
   async register(data: SignupUserInput): Promise<any> {
-    const { count } = await this.usersService
-      .count({
+    const { count } = await lastValueFrom(
+      this.usersService.count({
         where: JSON.stringify({ email: data.email }),
-      })
-      .toPromise();
+      }),
+    );
 
     if (count >= 1) throw new Error('Email taken');
 
-    const user: User = await this.usersService
-      .create({
+    const user: User = await lastValueFrom(
+      this.usersService.create({
         ...data,
         password: await this.passwordUtils.hash(data.password),
-      })
-      .toPromise();
+      }),
+    );
 
-    return user;
+    const result = JSON.parse(JSON.stringify(user));
+
+    const userRole: UserRole = await lastValueFrom(
+      this.usersService.assignRole({
+        userId: user['id'],
+        roleId: ROLES.STUDENT,
+      }),
+    );
+
+    delete result.password;
+    result.role = userRole;
+
+    return result;
   }
 
   async login(data: LoginUserInput): Promise<any> {
-    const user: any = await this.usersService
-      .findOne({
+    const user: any = await lastValueFrom(
+      this.usersService.findOne({
         where: JSON.stringify({ email: data.email }),
-      })
-      .toPromise();
+      }),
+    );
     if (!user) throw new Error('Unable to login');
 
     const isMatch = await this.passwordUtils.compare(
@@ -60,11 +78,11 @@ export class AuthService implements OnModuleInit {
   }
 
   async validateUser(data: LoginUserInput): Promise<boolean> {
-    const user: any = await this.usersService
-      .findOne({
+    const user: any = await lastValueFrom(
+      this.usersService.findOne({
         where: JSON.stringify({ email: data.email }),
-      })
-      .toPromise();
+      }),
+    );
 
     if (!user) throw new Error('Oh noo');
 

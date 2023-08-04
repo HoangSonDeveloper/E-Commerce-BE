@@ -26,10 +26,4 @@ export class UsersController implements OnModuleInit {
     this.usersService =
       this.usersServiceClient.getService<IUsersService>('UsersService');
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('test')
-  async test(): Promise<any> {
-    return 'Hello World';
-  }
 }

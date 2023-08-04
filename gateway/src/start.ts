@@ -7,6 +7,7 @@ import {
   ExpressAdapter,
   NestExpressApplication,
 } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function start() {
   const app: NestExpressApplication =
@@ -16,6 +17,16 @@ async function start() {
     );
   app.use(cors());
   app.use(cookieParser());
+
+  // Swagger config
+  const config = new DocumentBuilder()
+    .setTitle('LearnBox API - Documentation')
+    .setDescription('List of LearnBox API Gateway endpoints')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 

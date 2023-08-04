@@ -7,6 +7,11 @@ export class UserDto {
   readonly updatedAt?: string;
 }
 
+export interface AssignRoleDto {
+  readonly userId?: string;
+  readonly roleId?: number;
+}
+
 export interface SignupUserDTO {
   name: string;
   email: string;

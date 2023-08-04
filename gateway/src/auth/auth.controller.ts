@@ -24,7 +24,6 @@ export class AuthController {
   ): Promise<any> {
     try {
       const user = await this.authService.register(body);
-      delete user.password;
 
       res.cookie('x-auth-token', await this.authService.generateToken(user), {
         httpOnly: true,
@@ -50,9 +49,5 @@ export class AuthController {
     });
 
     return user;
-  }
-  @Get('test')
-  async test() {
-    return 'Hehe';
   }
 }

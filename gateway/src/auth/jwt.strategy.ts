@@ -38,12 +38,4 @@ export class JwtStrategy
     this.usersService =
       this.usersServiceClient.getService<IUsersService>('UsersService');
   }
-
-  async validate(payload: any): Promise<User> {
-    return this.usersService
-      .findOne({
-        where: JSON.stringify({ email: payload.email }),
-      })
-      .toPromise();
-  }
 }

@@ -9,8 +9,14 @@ message User {
   string name = 2;
   string email = 3;
   string password = 4;
-  string createdAt = 6;
-  string updatedAt = 7;
+  bool isVerified = 5;
+  string birthday = 6;
+  string avatar = 7;
+  string phone = 8;
+  string role = 9;
+  string biography = 10;
+  string createdAt = 11;
+  string updatedAt = 12;
 }
 
 message UserEdge {

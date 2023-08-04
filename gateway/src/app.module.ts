@@ -2,19 +2,16 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
   imports: [
     // AuthModule,
     UsersModule,
+    CoursesModule,
     AuthModule,
     ConfigModule.forRoot(),
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   driver: ApolloDriver,
-    //   autoSchemaFile: true,
-    // }),
   ],
 })
 export class AppModule {}
