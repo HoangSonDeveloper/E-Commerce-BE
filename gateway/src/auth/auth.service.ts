@@ -77,30 +77,10 @@ export class AuthService implements OnModuleInit {
     return user;
   }
 
-  async validateUser(data: LoginUserInput): Promise<boolean> {
-    const user: any = await lastValueFrom(
-      this.usersService.findOne({
-        where: JSON.stringify({ email: data.email }),
-      }),
-    );
-
-    if (!user) throw new Error('Oh noo');
-
-    const isMatch = await this.passwordUtils.compare(
-      data.password,
-      user.password,
-    );
-
-    if (!isMatch) throw new Error('alahu akbar');
-
-    return true;
-  }
-
   async generateToken(user: User): Promise<any> {
     const payload = {
       sub: user['_id'],
       email: user.email,
-
     };
 
     return await this.jwtService.signAsync(payload, { expiresIn: '60d' });

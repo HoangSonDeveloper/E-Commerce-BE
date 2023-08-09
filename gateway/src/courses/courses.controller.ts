@@ -6,6 +6,7 @@ import {
   OnModuleInit,
   Param,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -23,8 +24,9 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Get()
-  async getCourses() {
-    const result = await this.coursesService.showAll();
+  async getCourses(@Query() query: any) {
+    const { page, pageSize } = query;
+    const result = await this.coursesService.showAll(page, pageSize);
     return result;
   }
 

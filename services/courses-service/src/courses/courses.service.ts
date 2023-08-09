@@ -23,12 +23,10 @@ export class CoursesService implements ICoursesService {
     private readonly courseCategoryRepo: typeof CourseCategory,
   ) {}
 
-  async showAll(page: number = 1, pageSize: number = 10): Promise<Course[]> {
-    const offset = (page - 1) * pageSize;
-
+  async showAll(page: number, pageSize: number): Promise<Course[]> {
     const courses = await this.courseRepo.findAll({
-      limit: pageSize,
-      offset,
+      limit: pageSize ? pageSize : undefined,
+      offset: page ? (page - 1) * pageSize : undefined,
       raw: true,
     });
 

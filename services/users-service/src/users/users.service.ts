@@ -102,7 +102,7 @@ export class UsersService implements IUsersService {
       user_id: data.userId,
       role_id: data.roleId,
     });
-    
+
     return this.getRole(data.userId);
   }
 }
