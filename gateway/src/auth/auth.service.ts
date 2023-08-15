@@ -1,6 +1,15 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
+  IId,
   LoginUserInput,
   ROLES,
   User,
@@ -35,7 +44,7 @@ export class AuthService implements OnModuleInit {
       }),
     );
 
-    if (count >= 1) throw new Error('Email taken');
+    if (count > 0) throw new BadRequestException('Email already exists');
 
     const user: User = await lastValueFrom(
       this.usersService.create({
@@ -65,14 +74,24 @@ export class AuthService implements OnModuleInit {
         where: JSON.stringify({ email: data.email }),
       }),
     );
-    if (!user) throw new Error('Unable to login');
+
+    if (!user.email)
+      throw new UnauthorizedException('Username or password is invalid');
 
     const isMatch = await this.passwordUtils.compare(
       data.password,
       user.password,
     );
 
-    if (!isMatch) throw new Error('Unable to login');
+    if (!isMatch)
+      throw new UnauthorizedException('Username or password is invalid');
+
+    const userRole: UserRole = await lastValueFrom(
+      this.usersService.getRole({ id: user['id'] }),
+    );
+
+    delete user.password;
+    user.role = userRole;
 
     return user;
   }

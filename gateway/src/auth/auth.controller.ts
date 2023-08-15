@@ -1,7 +1,10 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   OnModuleInit,
   Post,
@@ -11,7 +14,6 @@ import {
 import { SignupUserInput } from '../common/common.interface';
 import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
-import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
@@ -32,22 +34,26 @@ export class AuthController {
 
       return user;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
+
   @Post('login')
   async login(
     @Body() body: SignupUserInput,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    const user = await this.authService.login(body);
-    delete user.password;
+    try {
+      const user = await this.authService.login(body);
 
-    res.cookie('x-auth-token', await this.authService.generateToken(user), {
-      httpOnly: true,
-      maxAge: 1.8e6,
-    });
+      res.cookie('x-auth-token', await this.authService.generateToken(user), {
+        httpOnly: true,
+        maxAge: 1.8e6,
+      });
 
-    return user;
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 }

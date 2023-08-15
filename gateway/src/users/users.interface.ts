@@ -20,4 +20,5 @@ export interface IUsersService {
   destroy(query: IQuery, metadata?: Metadata): Observable<ICount>;
   getRole(userId: IId, metadata?: Metadata): Observable<UserRole>;
   assignRole(input: AssignRoleDto, metadata?: Metadata): Observable<UserRole>;
+  getInstructor(id: IId, metadata?: Metadata): Observable<User>;
 }

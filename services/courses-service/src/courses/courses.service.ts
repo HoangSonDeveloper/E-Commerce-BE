@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { assign, isEmpty } from 'lodash';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindOptions } from 'sequelize/types';
 import { InjectModel } from '@nestjs/sequelize';
@@ -13,6 +13,7 @@ import {
   IFindAndPaginateOptions,
   IFindAndPaginateResult,
 } from '../common/find-and-paginate.interface';
+import { CourseInstructor } from '../course-instructors/models/course-instructors.model';
 
 @Injectable()
 export class CoursesService implements ICoursesService {
@@ -21,6 +22,8 @@ export class CoursesService implements ICoursesService {
     @InjectModel(Category) private readonly categoryRepo: typeof Category,
     @InjectModel(CourseCategory)
     private readonly courseCategoryRepo: typeof CourseCategory,
+    @InjectModel(CourseInstructor)
+    private readonly courseInstructorRepo: typeof CourseInstructor,
   ) {}
 
   async showAll(page: number, pageSize: number): Promise<Course[]> {
@@ -52,6 +55,12 @@ export class CoursesService implements ICoursesService {
 
   async count(query?: FindOptions): Promise<number> {
     const result: number = await this.courseRepo.count(query);
+
+    return result;
+  }
+
+  async countCourseCategories(query?: FindOptions): Promise<number> {
+    const result: number = await this.courseCategoryRepo.count(query);
 
     return result;
   }
@@ -95,6 +104,60 @@ export class CoursesService implements ICoursesService {
 
     return {
       categories,
+    };
+  }
+
+  async getInstructors(courseId: string): Promise<any> {
+    const result = await this.courseInstructorRepo.findAll({
+      where: { courseId },
+      raw: true,
+    });
+
+    const instructors = result.map((item) => item.instructorId);
+
+    return { instructors };
+  }
+
+  async assignCategories(courseId: string, categories: number[]): Promise<any> {
+    const course = await this.courseRepo.findByPk(courseId);
+
+    const courseCategories = await Promise.all(
+      categories.map(async (category) => {
+        const [courseCategory] = await this.courseCategoryRepo.findOrCreate({
+          where: { courseId, categoryId: category },
+        });
+
+        return courseCategory;
+      }),
+    );
+
+    return {
+      course,
+      courseCategories,
+    };
+  }
+
+  async assignInstructors(
+    courseId: string,
+    instructors: string[],
+  ): Promise<any> {
+    const course = await this.courseRepo.findByPk(courseId);
+
+    const courseInstructors = await Promise.all(
+      instructors.map(async (instructor) => {
+        const [courseInstructor] = await this.courseInstructorRepo.findOrCreate(
+          {
+            where: { courseId, instructorId: instructor },
+          },
+        );
+
+        return courseInstructor;
+      }),
+    );
+
+    return {
+      course,
+      courseInstructors,
     };
   }
 }

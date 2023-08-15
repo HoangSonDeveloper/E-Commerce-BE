@@ -5,9 +5,17 @@ import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
 import { Category } from './models/categories.model';
 import { CourseCategory } from './models/course-categories';
+import { CourseInstructor } from '../course-instructors/models/course-instructors.model';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Course, Category, CourseCategory])],
+  imports: [
+    SequelizeModule.forFeature([
+      Course,
+      Category,
+      CourseCategory,
+      CourseInstructor,
+    ]),
+  ],
   controllers: [CoursesController],
   providers: [{ provide: 'CoursesService', useClass: CoursesService }],
 })

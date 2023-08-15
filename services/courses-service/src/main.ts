@@ -9,7 +9,7 @@ async function main() {
     {
       transport: Transport.GRPC,
       options: {
-        url: '127.0.0.1:8001',
+        url: '127.0.0.1:8002',
         package: 'course',
         protoPath: join(__dirname, './proto/course.proto'),
         loader: {

@@ -52,6 +52,15 @@ export class CoursesController {
     return { count };
   }
 
+  @GrpcMethod('CoursesService', 'countCourseCategories')
+  async countCourseCategories(query: IQuery): Promise<ICount> {
+    const count: number = await this.service.countCourseCategories({
+      where: !isEmpty(query.where) ? JSON.parse(query.where) : undefined,
+    });
+
+    return { count };
+  }
+
   @GrpcMethod('CoursesService', 'create')
   async create(data: CourseDto): Promise<Course> {
     const result = await this.service.create(data);
@@ -78,6 +87,27 @@ export class CoursesController {
   @GrpcMethod('CoursesService', 'getCategories')
   async getCategories({ id }): Promise<CourseCategoriesDto> {
     const result = await this.service.getCategories(id);
+
+    return result;
+  }
+
+  @GrpcMethod('CoursesService', 'assignCategories')
+  async assignCategories({ courseId, categories }): Promise<any> {
+    const result = await this.service.assignCategories(courseId, categories);
+
+    return result;
+  }
+
+  @GrpcMethod('CoursesService', 'assignInstructors')
+  async assignInstructors({ courseId, instructors }): Promise<any> {
+    const result = await this.service.assignInstructors(courseId, instructors);
+
+    return result;
+  }
+
+  @GrpcMethod('CoursesService', 'getInstructors')
+  async getInstructors({ id }): Promise<any> {
+    const result = await this.service.getInstructors(id);
 
     return result;
   }

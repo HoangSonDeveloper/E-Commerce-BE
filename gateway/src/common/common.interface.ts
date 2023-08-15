@@ -34,7 +34,9 @@ export interface CreateCourseInput {
   price?: number;
   thumbnail?: string;
   isPublished?: boolean;
-  formatType?: string;
+  format?: string;
+  categories: number[];
+  instructors: string[];
 }
 
 export interface UpdatePostInput {

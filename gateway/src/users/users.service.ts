@@ -1,4 +1,9 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ClientGrpcProxy } from '@nestjs/microservices';
 import { IUsersService } from './users.interface';
 import { lastValueFrom } from 'rxjs';
@@ -18,19 +23,12 @@ export class UsersService implements OnModuleInit {
       this.usersServiceClient.getService<IUsersService>('UsersService');
   }
 
-  async getUser(query: any) {
-    console.log('query', query);
-    const user: any = await lastValueFrom(
-      this.usersService.findOne({
-        where: query,
-      }),
-    );
-
-    console.log('user', user);
-
-    const userRole = await lastValueFrom(
-      this.usersService.getRole({ id: user.id }),
-    );
+  async getInstructor(id: string) {
+    const userRole = await lastValueFrom(this.usersService.getRole({ id }));
+    if (userRole.roleId !== 2) {
+      throw new BadRequestException('User is not instructor');
+    }
+    const user: any = await lastValueFrom(this.usersService.findById({ id }));
 
     delete user.password;
     user.role = userRole;
@@ -38,9 +36,10 @@ export class UsersService implements OnModuleInit {
     return user;
   }
 
-  async getUserById(id: string) {
-    const user: any = await lastValueFrom(this.usersService.findById({ id }));
-
-    return user;
+  async assignRole(userId: string, roleId: number) {
+    const userRole = await lastValueFrom(
+      this.usersService.assignRole({ userId, roleId }),
+    );
+    return userRole;
   }
 }

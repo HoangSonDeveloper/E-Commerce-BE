@@ -30,10 +30,11 @@ export class CoursesController {
     return result;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async createCourse(@Body() body: CreateCourseInput) {
-    const result = await this.coursesService.createCourse(body);
-    return result;
+    const course = await this.coursesService.createCourse(body);
+    return course;
   }
 
   @Get(':id')
@@ -48,10 +49,4 @@ export class CoursesController {
     const result = await this.coursesService.enroll(body);
     return result;
   }
-
-  // @Get(':id/categories')
-  // async getCourseCategories(@Param('id') id: string) {
-  //   const result = await this.coursesService.getCourseCategories(id);
-  //   return result;
-  // }
 }

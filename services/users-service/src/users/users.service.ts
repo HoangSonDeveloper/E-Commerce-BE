@@ -98,10 +98,19 @@ export class UsersService implements IUsersService {
   }
 
   async assignRole(data: AssignRoleDto): Promise<UserRoleDto> {
-    await this.userRoleRepo.create({
-      user_id: data.userId,
-      role_id: data.roleId,
-    });
+    // check if user exists
+    const user = await this.userRoleRepo.findByPk(data.userId);
+    if (isEmpty(user)) {
+      await this.userRoleRepo.create({
+        user_id: data.userId,
+        role_id: data.roleId,
+      });
+    } else {
+      await this.userRoleRepo.update(
+        { role_id: data.roleId },
+        { where: { user_id: data.userId } },
+      );
+    }
 
     return this.getRole(data.userId);
   }

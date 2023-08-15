@@ -5,10 +5,11 @@ import {
   DataType,
   ForeignKey,
 } from 'sequelize-typescript';
-import { Course } from 'src/courses/models/courses.model';
+import { Course } from '../../courses/models/courses.model';
 
-@Table({ tableName: 'user_roles', timestamps: false })
-export class UserRole extends Model {
+@Table({ tableName: 'course_instructors', timestamps: false })
+export class CourseInstructor extends Model {
+  @ForeignKey(() => Course)
   @Column({
     field: 'course_id',
     type: DataType.STRING,
@@ -16,7 +17,6 @@ export class UserRole extends Model {
   })
   courseId: string;
 
-  @ForeignKey(() => Course)
   @Column({
     field: 'instructor_id',
     type: DataType.STRING,

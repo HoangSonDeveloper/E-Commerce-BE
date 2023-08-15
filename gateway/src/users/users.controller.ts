@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Inject,
@@ -14,16 +15,21 @@ import { isEmpty, merge } from 'lodash';
 import { IId, IQuery } from 'src/common/common.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersService } from './users.service';
+import { AssignRoleDto } from './users.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get(':id')
-  async getUser(@Param('id') id: string) {
-    let query: any = {};
+  @Get('/:id/taught-profile-courses')
+  async getInstructorInfo(@Param('id') id: string) {
+    const result = await this.usersService.getInstructor(id);
+    return result;
+  }
 
-    const result = await this.usersService.getUser(query);
+  @Post('/assign-role')
+  async assignRole(@Body() body: AssignRoleDto) {
+    const result = await this.usersService.assignRole(body.userId, body.roleId);
     return result;
   }
 }

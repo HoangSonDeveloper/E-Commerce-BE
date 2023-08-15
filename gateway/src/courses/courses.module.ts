@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { join } from 'path';
 import {
   ClientProxyFactory,
@@ -8,9 +8,10 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, forwardRef(() => UsersModule)],
   controllers: [CoursesController],
   providers: [
     CoursesService,
@@ -20,7 +21,7 @@ import { CoursesService } from './courses.service';
         return ClientProxyFactory.create({
           transport: Transport.GRPC,
           options: {
-            url: '127.0.0.1:8001',
+            url: '127.0.0.1:8002',
             package: 'course',
             protoPath: join(__dirname, '../proto/course.proto'),
           },
