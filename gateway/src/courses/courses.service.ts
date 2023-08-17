@@ -34,6 +34,14 @@ export class CoursesService implements OnModuleInit {
       this.usersServiceClient.getService<IUsersService>('UsersService');
   }
 
+  async getAllCategories() {
+    const result = await lastValueFrom(
+      this.coursesService.getAllCategories({}),
+    );
+
+    return result;
+  }
+
   async createCourse(data: CreateCourseInput) {
     const result = await lastValueFrom(
       this.coursesService.create({

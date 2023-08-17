@@ -21,4 +21,5 @@ export interface IUsersService {
   getRole(userId: IId, metadata?: Metadata): Observable<UserRole>;
   assignRole(input: AssignRoleDto, metadata?: Metadata): Observable<UserRole>;
   getInstructor(id: IId, metadata?: Metadata): Observable<User>;
+  showAll(paginateOptions: any): Observable<any>;
 }

@@ -1,17 +1,5 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Inject,
-  OnModuleInit,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
-import { SignupUserInput } from '../common/common.interface';
+import { LoginDto, RegisterDto } from './auth.dto';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
 
@@ -21,7 +9,7 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() body: SignupUserInput,
+    @Body() body: RegisterDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
     try {
@@ -40,7 +28,7 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() body: SignupUserInput,
+    @Body() body: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
     try {

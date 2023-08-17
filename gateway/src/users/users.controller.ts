@@ -6,6 +6,7 @@ import {
   OnModuleInit,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ClientGrpcProxy } from '@nestjs/microservices';
@@ -24,6 +25,13 @@ export class UsersController {
   @Get('/:id/taught-profile-courses')
   async getInstructorInfo(@Param('id') id: string) {
     const result = await this.usersService.getInstructor(id);
+    return result;
+  }
+
+  @Get('/instructors')
+  async getCourses(@Query() query: any) {
+    const { page, pageSize } = query;
+    const result = await this.usersService.showAll(page, pageSize);
     return result;
   }
 

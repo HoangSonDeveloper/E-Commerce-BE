@@ -14,7 +14,6 @@ export class CoursesController {
 
   @GrpcMethod('CoursesService', 'showAll')
   async showAll({ page, pageSize }) {
-    console.log('page', page, 'pageSize', pageSize);
     const courses = await this.service.showAll(page, pageSize);
 
     return {
@@ -110,5 +109,12 @@ export class CoursesController {
     const result = await this.service.getInstructors(id);
 
     return result;
+  }
+
+  @GrpcMethod('CoursesService', 'getAllCategories')
+  async getAllCategories(): Promise<any> {
+    const categories = await this.service.getAllCategories();
+
+    return { categories };
   }
 }

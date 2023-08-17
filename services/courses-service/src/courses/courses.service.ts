@@ -87,6 +87,14 @@ export class CoursesService implements ICoursesService {
     return result;
   }
 
+  async getAllCategories(): Promise<any> {
+    const categories = await this.categoryRepo.findAll({
+      raw: true,
+    });
+
+    return categories;
+  }
+
   async getCategories(courseId: string): Promise<CourseCategoriesDto> {
     const courseCategories = await this.courseCategoryRepo.findAll({
       where: { courseId },

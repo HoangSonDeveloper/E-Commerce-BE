@@ -122,4 +122,13 @@ export class UsersController {
 
     return result;
   }
+
+  @GrpcMethod('UsersService', 'showAll')
+  async showAll({ page, pageSize }) {
+    const users = await this.service.showAll(page, pageSize);
+
+    return {
+      users,
+    };
+  }
 }

@@ -114,4 +114,14 @@ export class UsersService implements IUsersService {
 
     return this.getRole(data.userId);
   }
+
+  async showAll(page: number, pageSize: number): Promise<any> {
+    const users = await this.userRepo.findAll({
+      limit: pageSize ? pageSize : undefined,
+      offset: page ? (page - 1) * pageSize : undefined,
+      raw: true,
+    });
+
+    return users;
+  }
 }

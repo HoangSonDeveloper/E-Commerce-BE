@@ -18,4 +18,5 @@ export interface IUsersService {
   destroy(query?: FindOptions): Promise<number>;
   getRole(userId: string): Promise<UserRoleDto>;
   assignRole(comment: AssignRoleDto): Promise<UserRoleDto>;
+  showAll(page: number, pageSize: number): Promise<any>;
 }

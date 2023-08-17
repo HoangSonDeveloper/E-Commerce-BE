@@ -53,6 +53,15 @@ message AssignRolePayload {
   int32 roleId = 2;
 }
 
+message UsersList {
+  repeated User users = 1;
+}
+
+message PaginateOptions {
+  int32 page = 1;
+  int32 pageSize = 2;
+}
+
 service UsersService {
   rpc find (commons.Query) returns (FindUsersPayload) {}
   rpc findById (commons.Id) returns (User) {}
@@ -63,4 +72,5 @@ service UsersService {
   rpc destroy (commons.Query) returns (commons.Count) {}
   rpc getRole (commons.Id) returns (UserRole) {}
   rpc assignRole (AssignRolePayload) returns (UserRole) {}
+  rpc showAll (PaginateOptions) returns (UsersList) {}
 }

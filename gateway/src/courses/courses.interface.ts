@@ -48,4 +48,5 @@ export interface ICoursesService {
   assignCategories(input: AssignCategoriesInput): Observable<any>;
   getInstructors(id: IId): Observable<CourseInstructors>;
   assignInstructors(input: AssignInstructorsInput): Observable<any>;
+  getAllCategories(input: any): Observable<any>;
 }

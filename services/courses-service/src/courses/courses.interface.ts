@@ -19,4 +19,5 @@ export interface ICoursesService {
   assignCategories(courseId: string, categories: number[]): Promise<any>;
   getInstructors(courseId: string): Promise<any>;
   assignInstructors(courseId: string, instructors: string[]): Promise<any>;
+  getAllCategories(): Promise<any>;
 }

@@ -21,6 +21,13 @@ message Course {
   repeated string instructors = 14;
 }
 
+message Category {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  int32 parent = 4;
+}
+
 message CourseEdge {
   Course node = 1;
   string cursor = 2;
@@ -48,6 +55,10 @@ message UpdateCourseInput {
 
 message CourseCategories {
   repeated string categories = 1;
+}
+
+message Categories {
+  repeated Category categories = 1;
 }
 
 message CourseList {
@@ -92,6 +103,8 @@ message AssignInstructors {
   repeated string instructors = 2;
 }
 
+message Empty {}
+
 service CoursesService {
   rpc showAll (PaginateOptions) returns (CourseList) {}
   rpc findById (commons.Id) returns (Course) {}
@@ -106,4 +119,5 @@ service CoursesService {
   rpc assignCategories (AssignCategories) returns (CourseCategories) {}
   rpc getInstructors (commons.Id) returns (CourseInstructorsList) {}
   rpc assignInstructors (AssignInstructors) returns (CourseInstructorsList) {}
+  rpc getAllCategories (Empty) returns (Categories) {}
 }

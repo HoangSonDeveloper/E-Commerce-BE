@@ -23,7 +23,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @Get()
+  @Get('/')
   async getCourses(@Query() query: any) {
     const { page, pageSize } = query;
     const result = await this.coursesService.showAll(page, pageSize);
@@ -31,22 +31,28 @@ export class CoursesController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('create')
+  @Post('/create')
   async createCourse(@Body() body: CreateCourseInput) {
     const course = await this.coursesService.createCourse(body);
     return course;
   }
 
-  @Get(':id')
-  async getCourseById(@Param('id') id: string) {
-    const result = await this.coursesService.getCourseById(id);
+  @Get('/categories')
+  async getAllCategories() {
+    const result = await this.coursesService.getAllCategories();
     return result;
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('enroll')
+  @Post('/enroll')
   async enroll(@Body() body: EnrollmentInputDto) {
     const result = await this.coursesService.enroll(body);
+    return result;
+  }
+
+  @Get('/:id')
+  async getCourseById(@Param('id') id: string) {
+    const result = await this.coursesService.getCourseById(id);
     return result;
   }
 }
