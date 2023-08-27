@@ -70,7 +70,7 @@ export class UsersController {
       where: !isEmpty(query.where) ? JSON.parse(query.where) : undefined,
     });
 
-    if (isEmpty(result)) return new User();
+    if (isEmpty(result)) throw new Error('Record not found.');
 
     return result;
   }
@@ -108,8 +108,9 @@ export class UsersController {
   }
 
   @GrpcMethod('UsersService', 'getRole')
-  async getRole({ id }): Promise<UserRoleDto> {
-    const userRole = await this.service.getRole(id);
+  async getRole(userId: string): Promise<UserRoleDto> {
+    console.log('getRole', userId);
+    const userRole = await this.service.getRole(userId);
 
     if (isEmpty(userRole)) throw new Error('Record not found.');
 
@@ -121,14 +122,5 @@ export class UsersController {
     const result = await this.service.assignRole(data);
 
     return result;
-  }
-
-  @GrpcMethod('UsersService', 'showAll')
-  async showAll({ page, pageSize }) {
-    const users = await this.service.showAll(page, pageSize);
-
-    return {
-      users,
-    };
   }
 }

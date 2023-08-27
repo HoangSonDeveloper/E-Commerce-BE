@@ -8,7 +8,6 @@ import {
   NestExpressApplication,
 } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
 
 async function start() {
   const app: NestExpressApplication =
@@ -27,8 +26,6 @@ async function start() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(5001);
 }

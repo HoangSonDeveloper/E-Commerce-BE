@@ -8,7 +8,6 @@ import { Category } from './courses/models/categories.model';
 import { CourseCategory } from './courses/models/course-categories';
 import { Enrollment } from './enrollment/models/enrollment.model';
 import { EnrollmentModule } from './enrollment/enrollment.module';
-import { CourseInstructor } from './course-instructors/models/course-instructors.model';
 
 @Module({
   imports: [
@@ -32,17 +31,11 @@ import { CourseInstructor } from './course-instructors/models/course-instructors
         // autoLoadModels: true,
         dialectOptions: {
           ssl: {
-            rejectUnauthorized: false,
+            ca: fs.readFileSync(__dirname + '/config/ca.crt'),
           },
         },
         synchronize: configService.get<boolean>('DB_SYNC'),
-        models: [
-          Course,
-          Category,
-          CourseCategory,
-          Enrollment,
-          CourseInstructor,
-        ],
+        models: [Course, Category, CourseCategory, Enrollment],
         // define: {
         //   timestamps: true,
         //   underscored: false,

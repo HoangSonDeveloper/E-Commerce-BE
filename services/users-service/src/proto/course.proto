@@ -15,17 +15,9 @@ message Course {
   double price = 8;
   string thumbnail = 9;
   bool isPublished = 10;
-  string createdAt = 11;
-  string updatedAt = 12;
-  repeated string categories = 13;
-  repeated string instructors = 14;
-}
-
-message Category {
-  int32 id = 1;
-  string name = 2;
-  string description = 3;
-  int32 parent = 4;
+  string formatType = 11;
+  string createdAt = 12;
+  string updatedAt = 13;
 }
 
 message CourseEdge {
@@ -44,25 +36,11 @@ message CreateCourseInput {
   string thumbnail = 9;
   bool isPublished = 10;
   string formatType = 11;
-  repeated string categories = 12;
-  repeated string instructors = 13;
 }
 
 message UpdateCourseInput {
   string id = 1;
   Course data = 2;
-}
-
-message CourseCategories {
-  repeated string categories = 1;
-}
-
-message Categories {
-  repeated Category categories = 1;
-}
-
-message CourseList {
-  repeated Course courses = 1;
 }
 
 message Enrollment {
@@ -79,45 +57,18 @@ message EnrollmentInput {
   string studentId = 2;
 }
 
-message CourseInstructorsList {
-  repeated string instructors = 1;
-}
-
-message PaginateOptions {
-  int32 page = 1;
-  int32 pageSize = 2;
-}
-
 message FindCoursePayload {
   repeated CourseEdge edges = 1;
   commons.PageInfo pageInfo = 2;
 }
 
-message AssignCategories {
-  string courseId = 1;
-  repeated int32 categories = 2;
-}
-
-message AssignInstructors {
-  string courseId = 1;
-  repeated string instructors = 2;
-}
-
-message Empty {}
-
 service CoursesService {
-  rpc showAll (PaginateOptions) returns (CourseList) {}
+  rpc find (commons.Query) returns (FindCoursePayload) {}
   rpc findById (commons.Id) returns (Course) {}
   rpc findOne (commons.Query) returns (Course) {}
   rpc count (commons.Query) returns (commons.Count) {}
-  rpc countCourseCategories (commons.Query) returns (commons.Count) {}
   rpc create (CreateCourseInput) returns (Course) {}
   rpc update (UpdateCourseInput) returns (Course) {}
   rpc destroy (commons.Query) returns (commons.Count) {}
   rpc enroll (EnrollmentInput) returns (Enrollment) {}
-  rpc getCategories (commons.Id) returns (CourseCategories) {}
-  rpc assignCategories (AssignCategories) returns (CourseCategories) {}
-  rpc getInstructors (commons.Id) returns (CourseInstructorsList) {}
-  rpc assignInstructors (AssignInstructors) returns (CourseInstructorsList) {}
-  rpc getAllCategories (Empty) returns (Categories) {}
 }

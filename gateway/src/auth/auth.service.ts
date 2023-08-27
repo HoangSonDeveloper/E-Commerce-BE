@@ -1,15 +1,6 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  OnModuleInit,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
-  IId,
   LoginUserInput,
   ROLES,
   User,
@@ -44,7 +35,7 @@ export class AuthService implements OnModuleInit {
       }),
     );
 
-    if (count > 0) throw new BadRequestException('Email already exists');
+    if (count >= 1) throw new Error('Email taken');
 
     const user: User = await lastValueFrom(
       this.usersService.create({
@@ -74,32 +65,42 @@ export class AuthService implements OnModuleInit {
         where: JSON.stringify({ email: data.email }),
       }),
     );
-
-    if (!user.email)
-      throw new UnauthorizedException('Username or password is invalid');
+    if (!user) throw new Error('Unable to login');
 
     const isMatch = await this.passwordUtils.compare(
       data.password,
       user.password,
     );
 
-    if (!isMatch)
-      throw new UnauthorizedException('Username or password is invalid');
-
-    const userRole: UserRole = await lastValueFrom(
-      this.usersService.getRole({ id: user['id'] }),
-    );
-
-    delete user.password;
-    user.role = userRole;
+    if (!isMatch) throw new Error('Unable to login');
 
     return user;
+  }
+
+  async validateUser(data: LoginUserInput): Promise<boolean> {
+    const user: any = await lastValueFrom(
+      this.usersService.findOne({
+        where: JSON.stringify({ email: data.email }),
+      }),
+    );
+
+    if (!user) throw new Error('Oh noo');
+
+    const isMatch = await this.passwordUtils.compare(
+      data.password,
+      user.password,
+    );
+
+    if (!isMatch) throw new Error('alahu akbar');
+
+    return true;
   }
 
   async generateToken(user: User): Promise<any> {
     const payload = {
       sub: user['_id'],
       email: user.email,
+
     };
 
     return await this.jwtService.signAsync(payload, { expiresIn: '60d' });

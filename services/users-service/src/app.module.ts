@@ -29,7 +29,7 @@ import { Role } from './users/models/roles.model';
         // autoLoadModels: true,
         dialectOptions: {
           ssl: {
-            rejectUnauthorized: false,
+            ca: fs.readFileSync(__dirname + '/config/ca.crt'),
           },
         },
         synchronize: configService.get<boolean>('DB_SYNC'),

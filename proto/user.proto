@@ -13,15 +13,10 @@ message User {
   string birthday = 6;
   string avatar = 7;
   string phone = 8;
-  string biography = 9;
-  string createdAt = 10;
-  string updatedAt = 11;
-}
-
-message UserRole {
-  string userId = 1;
-  int32 roleId = 2;
-  string roleName = 3;
+  string role = 9;
+  string biography = 10;
+  string createdAt = 11;
+  string updatedAt = 12;
 }
 
 message UserEdge {
@@ -33,9 +28,6 @@ message CreateUser {
   string name = 1;
   string email = 2;
   string password = 3;
-  string user_id = 4;
-  int32 role_id = 5;
-  string role_name = 6;
 }
 
 message UpdateUser {
@@ -48,11 +40,6 @@ message FindUsersPayload {
   commons.PageInfo pageInfo = 2;
 }
 
-message AssignRolePayload {
-  string userId = 1;
-  int32 roleId = 2;
-}
-
 service UsersService {
   rpc find (commons.Query) returns (FindUsersPayload) {}
   rpc findById (commons.Id) returns (User) {}
@@ -61,6 +48,4 @@ service UsersService {
   rpc create (CreateUser) returns (User) {}
   rpc update (UpdateUser) returns (User) {}
   rpc destroy (commons.Query) returns (commons.Count) {}
-  rpc getRole (commons.Id) returns (UserRole) {}
-  rpc assignRole (AssignRolePayload) returns (UserRole) {}
 }

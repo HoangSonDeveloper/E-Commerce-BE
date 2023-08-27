@@ -1,7 +1,17 @@
-import { LoginDto, RegisterDto } from './auth.dto';
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  OnModuleInit,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
+import { SignupUserInput } from '../common/common.interface';
 import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
@@ -9,7 +19,7 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() body: RegisterDto,
+    @Body() body: SignupUserInput,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
     try {
@@ -22,26 +32,22 @@ export class AuthController {
 
       return user;
     } catch (error) {
-      throw error;
+      return error.message;
     }
   }
-
   @Post('login')
   async login(
-    @Body() body: LoginDto,
+    @Body() body: SignupUserInput,
     @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    try {
-      const user = await this.authService.login(body);
+    const user = await this.authService.login(body);
+    delete user.password;
 
-      res.cookie('x-auth-token', await this.authService.generateToken(user), {
-        httpOnly: true,
-        maxAge: 1.8e6,
-      });
+    res.cookie('x-auth-token', await this.authService.generateToken(user), {
+      httpOnly: true,
+      maxAge: 1.8e6,
+    });
 
-      return user;
-    } catch (error) {
-      throw error;
-    }
+    return user;
   }
 }
