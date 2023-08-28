@@ -73,13 +73,10 @@ export class CoursesService {
           query.include[1].where = {
             instructor_id: value,
           };
-          // remove instructor_id from filterBy
           filterBy = this.queryUtils.removeFilter(filterBy, filter);
         }
       });
     }
-
-    console.log(filterBy);
 
     merge(
       query,

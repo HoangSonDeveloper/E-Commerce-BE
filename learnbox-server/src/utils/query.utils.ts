@@ -24,7 +24,7 @@ export class QueryUtils {
   }
 
   removeFilter(filterBy: string, filter: string): string {
-    return filterBy.replace(filter + ';', '');
+    return filterBy.replace(`${filter};`, '');
   }
 
   async getOrder(order: string): Promise<IQuery> {
