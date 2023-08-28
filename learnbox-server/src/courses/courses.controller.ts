@@ -19,7 +19,7 @@ import { EnrollmentDto } from './courses.dto';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @Get('/')
+  @Get()
   async getCourses(
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
@@ -29,6 +29,10 @@ export class CoursesController {
     return this.coursesService.getCourses(page, pageSize, filterBy, orderBy);
   }
 
+  @Post('create')
+  async createCourse(@Body() body: any) {
+    return this.coursesService.createCourse(body);
+  }
   @Get('categories')
   async getAllCategories() {
     return this.coursesService.getAllCategories();

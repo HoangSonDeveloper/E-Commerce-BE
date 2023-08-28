@@ -23,6 +23,10 @@ export class QueryUtils {
     return queryFilters;
   }
 
+  removeFilter(filterBy: string, filter: string): string {
+    return filterBy.replace(filter + ';', '');
+  }
+
   async getOrder(order: string): Promise<IQuery> {
     const queryOrder: IQuery = {};
 

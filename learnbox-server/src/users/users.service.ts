@@ -178,4 +178,30 @@ export class UsersService {
       },
     };
   }
+
+  async editProfile(id: string, data: any): Promise<any> {
+    const user = await this.userRepo.findByPk(id);
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const count = await this.userRepo.count({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (count > 0) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    await this.userRepo.update(data, {
+      where: {
+        id,
+      },
+    });
+
+    return this.getUser(id);
+  }
 }

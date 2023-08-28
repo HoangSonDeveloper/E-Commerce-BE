@@ -39,6 +39,7 @@ export class CoursesService {
     orderBy: string,
   ): Promise<any> {
     const query = {
+      where: {},
       include: [
         {
           model: Category,
@@ -72,12 +73,20 @@ export class CoursesService {
           query.include[1].where = {
             instructor_id: value,
           };
+          // remove instructor_id from filterBy
+          filterBy = this.queryUtils.removeFilter(filterBy, filter);
         }
       });
     }
 
-    merge(query, this.queryUtils.buildQuery(page, pageSize, filterBy, orderBy));
+    console.log(filterBy);
 
+    merge(
+      query,
+      await this.queryUtils.buildQuery(page, pageSize, filterBy, orderBy),
+    );
+
+    console.log(JSON.stringify(query));
     const courses = await this.courseRepo.findAll(query);
     const result = await Promise.all(
       courses.map(async (course) => {
@@ -207,5 +216,22 @@ export class CoursesService {
       cancelled: false,
     });
     return enrollment;
+  }
+
+  async createCourse(payload: any): Promise<any> {
+    const course = await this.courseRepo.create({
+      ...payload,
+    });
+
+    const categories = payload.categories.map((category) => {
+      return {
+        courseId: course.id,
+        categoryId: category,
+      };
+    });
+
+    await this.courseCategoryRepo.bulkCreate(categories);
+
+    return course;
   }
 }
