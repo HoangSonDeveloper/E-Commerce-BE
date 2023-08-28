@@ -24,7 +24,10 @@ export class QueryUtils {
   }
 
   removeFilter(filterBy: string, filter: string): string {
-    return filterBy.replace(`${filter};`, '');
+    const filtered = filterBy.replace(filter, '');
+    if (filtered[0] === ';') {
+      return filtered.substring(1);
+    }
   }
 
   async getOrder(order: string): Promise<IQuery> {
