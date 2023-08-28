@@ -10,7 +10,7 @@ import { Op, Sequelize } from 'sequelize';
 import { CourseInstructor } from './models/course-instructors.model';
 import { User } from '../users/models/users.model';
 import { CourseClass } from './models/course-classes.model';
-import { EnrollmentDto } from './courses.dto';
+import { CreateCourseDto, EnrollmentDto } from './courses.dto';
 import { Enrollment } from './models/enrollment.model';
 
 @Injectable()
@@ -28,6 +28,8 @@ export class CoursesService {
     private readonly userRepo: typeof User,
     @InjectModel(Enrollment)
     private readonly enrollmentRepo: typeof Enrollment,
+    @InjectModel(CourseInstructor)
+    private readonly courseInstructor: typeof CourseInstructor,
     private readonly queryUtils: QueryUtils,
     private readonly helperUtils: HelperUtils,
   ) {}
@@ -83,7 +85,6 @@ export class CoursesService {
       await this.queryUtils.buildQuery(page, pageSize, filterBy, orderBy),
     );
 
-    console.log(JSON.stringify(query));
     const courses = await this.courseRepo.findAll(query);
     const result = await Promise.all(
       courses.map(async (course) => {
@@ -215,7 +216,7 @@ export class CoursesService {
     return enrollment;
   }
 
-  async createCourse(payload: any): Promise<any> {
+  async createCourse(payload: CreateCourseDto): Promise<any> {
     const course = await this.courseRepo.create({
       ...payload,
     });
@@ -228,6 +229,15 @@ export class CoursesService {
     });
 
     await this.courseCategoryRepo.bulkCreate(categories);
+
+    const instructors = payload.instructors.map((instructor) => {
+      return {
+        courseId: course.id,
+        instructorId: instructor,
+      };
+    });
+
+    await this.courseInstructor.bulkCreate(instructors);
 
     return course;
   }

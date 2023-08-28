@@ -7,13 +7,15 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { merge, get } from 'lodash';
 import { QueryUtils } from '../utils/query.utils';
 import { CoursesService } from './courses.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { EnrollmentDto } from './courses.dto';
+import { CreateCourseDto, EnrollmentDto } from './courses.dto';
+import { Response } from 'express';
 
 @Controller('courses')
 export class CoursesController {
@@ -30,7 +32,7 @@ export class CoursesController {
   }
 
   @Post('create')
-  async createCourse(@Body() body: any) {
+  async createCourse(@Body() body: CreateCourseDto) {
     return this.coursesService.createCourse(body);
   }
   @Get('categories')

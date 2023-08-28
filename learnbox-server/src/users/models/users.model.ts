@@ -16,7 +16,6 @@ import { Course } from '../../courses/models/courses.model';
 
 @Table({
   tableName: 'users',
-  timestamps: true,
 })
 export class User extends Model {
   @Column({
@@ -69,6 +68,7 @@ export class User extends Model {
   @Column({
     type: DataType.TEXT,
     comment: "The user's avatar url.",
+    defaultValue: process.env.DEFAULT_USER_IMAGE,
   })
   avatar: string;
 

@@ -36,6 +36,7 @@ export class AuthService {
       let user: any = await this.userRepo.create({
         ...data,
         password: await this.passwordUtils.hash(data.password),
+        avatar: process.env.DEFAULT_USER_IMAGE,
       });
 
       await this.userRoleRepo.create({

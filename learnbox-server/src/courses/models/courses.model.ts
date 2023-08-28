@@ -55,15 +55,20 @@ export class Course extends Model {
   })
   level: string;
 
+  @AllowNull(false)
   @Column(DataType.DECIMAL(10, 2))
   price: number;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.STRING,
+    defaultValue: process.env.DEFAULT_USER_IMAGE,
+  })
   thumbnail: string;
 
   @Column({
     field: 'is_published',
     type: DataType.BOOLEAN,
+    defaultValue: false,
   })
   isPublished: boolean;
 

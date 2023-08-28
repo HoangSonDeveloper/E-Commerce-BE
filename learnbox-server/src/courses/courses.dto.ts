@@ -22,13 +22,18 @@ enum Level {
 
 export class CreateCourseDto {
   @IsNotEmpty()
-  title: string;
+  name: string;
 
-  @IsNotEmpty()
+  shortDescription: string;
+
   description: string;
 
   @IsNotEmpty()
-  @IsDecimal()
+  outcome: string;
+
+  thumbnail: string;
+
+  @IsNotEmpty()
   price: number;
 
   @IsNotEmpty()
@@ -45,7 +50,11 @@ export class CreateCourseDto {
 
   @IsNotEmpty()
   @IsArray()
-  categories: string[];
+  categories: number[];
+
+  @IsNotEmpty()
+  @IsArray()
+  instructors: string[];
 }
 
 export class EnrollmentDto {
