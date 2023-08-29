@@ -46,6 +46,7 @@ export class CoursesService {
         {
           model: Category,
           attributes: [],
+          where: {},
           through: {
             attributes: [],
           },
@@ -70,6 +71,7 @@ export class CoursesService {
           query.include[0].where = {
             id: value,
           };
+          filterBy = this.queryUtils.removeFilter(filterBy, filter);
         }
         if (key === 'instructor_id') {
           query.include[1].where = {
@@ -78,6 +80,8 @@ export class CoursesService {
           filterBy = this.queryUtils.removeFilter(filterBy, filter);
         }
       });
+
+      console.log(JSON.stringify(query));
     }
 
     merge(
