@@ -9,6 +9,7 @@ import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'sequelize';
+import { NextFunction, Request, Response } from 'express';
 
 async function bootstrap() {
   const app: NestExpressApplication =
@@ -24,6 +25,17 @@ async function bootstrap() {
     }),
   );
   app.use(cookieParser());
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.header('Access-Control-Allow-Origin', 'https://learnbox.live');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept',
+    );
+    next();
+  });
 
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalPipes(
