@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   async login(data: any): Promise<any> {
-    const user: any = await this.userRepo.findOne({
+    const user: User = await this.userRepo.findOne({
       where: { email: data.email },
       raw: true,
     });
@@ -76,8 +76,17 @@ export class AuthService {
     if (!isMatch)
       throw new UnauthorizedException('Username or password is invalid');
 
-    const role = await this.roleRepo.findByPk(ROLES.STUDENT, {
-      raw: true,
+    const { role } = await this.userRoleRepo.findOne({
+      where: {
+        user_id: user.id,
+      },
+      attributes: [],
+      include: [
+        {
+          model: Role,
+          attributes: ['id', 'name'],
+        },
+      ],
     });
 
     delete user.password;

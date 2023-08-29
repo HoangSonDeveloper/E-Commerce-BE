@@ -54,4 +54,10 @@ export class AuthController {
       throw error;
     }
   }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response): Promise<any> {
+    res.clearCookie('x-auth-token');
+    return 'OK';
+  }
 }
