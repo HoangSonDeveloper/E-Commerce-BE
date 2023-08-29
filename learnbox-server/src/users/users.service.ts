@@ -152,6 +152,18 @@ export class UsersService {
       attributes: {
         exclude: ['password'],
       },
+      include: [
+        {
+          model: Role,
+          attributes: [],
+          where: {
+            id: ROLES.INSTRUCTOR,
+          },
+          through: {
+            attributes: [],
+          },
+        },
+      ],
     });
 
     const count = await this.userRoleRepo.count({

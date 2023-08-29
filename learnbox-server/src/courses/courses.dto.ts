@@ -1,11 +1,10 @@
 import {
-  IsUUID,
   IsNotEmpty,
   IsEnum,
-  IsDecimal,
   IsBoolean,
   IsDateString,
   IsArray,
+  IsUUID,
 } from 'class-validator';
 
 enum Format {
@@ -63,4 +62,29 @@ export class EnrollmentDto {
 
   @IsNotEmpty()
   classId: string;
+}
+
+export class CreateClassDto {
+  @IsNotEmpty()
+  @IsUUID()
+  courseId: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  startDate: Date;
+
+  @IsNotEmpty()
+  @IsDateString()
+  endDate: Date;
+
+  @IsNotEmpty()
+  @IsDateString()
+  registrationStart: Date;
+
+  @IsNotEmpty()
+  @IsDateString()
+  registrationEnd: Date;
+
+  @IsNotEmpty()
+  enrollmentLimit: number;
 }

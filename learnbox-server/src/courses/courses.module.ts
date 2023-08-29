@@ -26,6 +26,5 @@ import { User } from '../users/models/users.model';
   ],
   controllers: [CoursesController],
   providers: [CoursesService],
-  exports: [CoursesService],
 })
 export class CoursesModule {}

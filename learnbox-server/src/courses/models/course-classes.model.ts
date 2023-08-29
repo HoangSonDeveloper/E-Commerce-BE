@@ -20,8 +20,11 @@ export class CourseClass extends Model {
   id: string;
 
   @ForeignKey(() => Course) // Define the foreign key reference to the Course model
-  @Column(DataType.STRING)
-  course_id: string;
+  @Column({
+    type: DataType.STRING,
+    field: 'course_id',
+  })
+  courseId: string;
 
   @Column({
     field: 'start_date',
@@ -53,6 +56,9 @@ export class CourseClass extends Model {
   })
   enrollmentLimit: number;
 
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    defaultValue: 0,
+  })
   enrolled: number;
 }

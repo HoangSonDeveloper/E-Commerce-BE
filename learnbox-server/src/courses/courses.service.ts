@@ -10,7 +10,7 @@ import { Op, Sequelize } from 'sequelize';
 import { CourseInstructor } from './models/course-instructors.model';
 import { User } from '../users/models/users.model';
 import { CourseClass } from './models/course-classes.model';
-import { CreateCourseDto, EnrollmentDto } from './courses.dto';
+import { CreateClassDto, CreateCourseDto, EnrollmentDto } from './courses.dto';
 import { Enrollment } from './models/enrollment.model';
 
 @Injectable()
@@ -160,7 +160,7 @@ export class CoursesService {
   async getClasses(courseId: string): Promise<any> {
     const result = await this.courseClassRepo.findAll({
       where: {
-        course_id: courseId,
+        courseId,
       },
     });
 
@@ -182,7 +182,7 @@ export class CoursesService {
 
     if (
       courseClass.enrolled >= courseClass.enrollmentLimit &&
-      courseClass.enrollmentLimit
+      courseClass.enrollmentLimit !== 0
     ) {
       throw new BadRequestException('Class is full');
     }
@@ -240,5 +240,13 @@ export class CoursesService {
     await this.courseInstructor.bulkCreate(instructors);
 
     return course;
+  }
+
+  async createCourseClass(payload: CreateClassDto): Promise<any> {
+    const courseClass = await this.courseClassRepo.create({
+      ...payload,
+    });
+
+    return courseClass;
   }
 }

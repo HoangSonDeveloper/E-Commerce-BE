@@ -14,7 +14,7 @@ import { merge, get } from 'lodash';
 import { QueryUtils } from '../utils/query.utils';
 import { CoursesService } from './courses.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateCourseDto, EnrollmentDto } from './courses.dto';
+import { CreateClassDto, CreateCourseDto, EnrollmentDto } from './courses.dto';
 import { Response } from 'express';
 
 @Controller('courses')
@@ -45,6 +45,11 @@ export class CoursesController {
     return this.coursesService.getClasses(courseId);
   }
 
+  @Post('classes/create')
+  async createCourseClass(@Body() body: CreateClassDto) {
+    return this.coursesService.createCourseClass(body);
+  }
+
   @Get(':id/course-info')
   async getCourseInfo(@Param('id') id: string) {
     const course = await this.coursesService.getCourseInfo(id);
@@ -60,5 +65,11 @@ export class CoursesController {
   @Post('enroll')
   async enrollCourse(@Body() body: EnrollmentDto) {
     return this.coursesService.enrollCourse(body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('test')
+  async test() {
+    return 'test';
   }
 }

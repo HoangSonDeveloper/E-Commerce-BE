@@ -16,7 +16,13 @@ async function bootstrap() {
       AppModule,
       new ExpressAdapter(),
     );
-  app.use(cors());
+  app.use(
+    cors({
+      origin: ['http://localhost:3000', 'https://learnbox.live'],
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true,
+    }),
+  );
   app.use(cookieParser());
 
   app.useGlobalFilters(new GlobalExceptionFilter());
@@ -28,6 +34,6 @@ async function bootstrap() {
       },
     }),
   );
-  await app.listen(3000);
+  await app.listen(5001);
 }
 bootstrap();

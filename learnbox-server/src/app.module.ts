@@ -13,6 +13,8 @@ import { Category } from './courses/models/categories.model';
 import { CourseInstructor } from './courses/models/course-instructors.model';
 import { CourseClass } from './courses/models/course-classes.model';
 import { Enrollment } from './courses/models/enrollment.model';
+import { PaymentModule } from './payment/payment.module';
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
@@ -53,6 +55,8 @@ import { Enrollment } from './courses/models/enrollment.model';
     UsersModule,
     AuthModule,
     CoursesModule,
+    PaymentModule,
+    TestModule,
   ],
 })
 export class AppModule {}
